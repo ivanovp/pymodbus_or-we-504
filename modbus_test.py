@@ -45,14 +45,15 @@ if __name__ == "__main__":
     print ("read holding registers")
     try:
         holding_regs = client.read_holding_registers(0, 2, slave=1)
-        print (holding_regs.registers)
     except ModbusException as exc:
         print(f"Received ModbusException({exc}) from library")
     if holding_regs.isError():
         print(f"Received Modbus library error({holding_regs})")
-    if isinstance(holding_regs, ExceptionResponse):
+    elif isinstance(holding_regs, ExceptionResponse):
         print(f"Received Modbus library exception ({holding_regs})")
         # THIS IS NOT A PYTHON EXCEPTION, but a valid modbus message
+    else:
+        print (holding_regs.registers)
 
     print ("close connection")
     client.close()
